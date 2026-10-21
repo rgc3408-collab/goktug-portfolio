@@ -1,15 +1,883 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#10131a"><meta name="description" content="Rasim Göktuğ Can'ın yazılım, öğrenme ve çalışmalarını paylaştığı kişisel portföy sitesi.">
-  <title>Rasim Göktuğ Can — Portföy</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Rasim Göktuğ Can'ın kişisel portföyü">
+  <title>Rasim Göktuğ Can | Portföy</title>
+
+  <style>
+    :root {
+      --bg: #070b09;
+      --panel: #0d130f;
+      --green: #39ff88;
+      --text: #f5f7f5;
+      --muted: #a1aaa4;
+      --line: #1d2a22;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 85px;
+    }
+
+    body {
+      background:
+        radial-gradient(ellipse at 80% 8%, #39ff8814, transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, 90%);
+      margin-inline: auto;
+    }
+
+    /* Üst menü */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: #070b09ed;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-inner {
+      width: min(1120px, 90%);
+      min-height: 72px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      color: var(--green);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #cbd3ce;
+      font-size: 12px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--green);
+    }
+
+    .menu-toggle {
+      display: none;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Giriş alanı */
+    .hero {
+      padding: 78px 0 65px;
+      background: radial-gradient(circle at 50% 20%, #39ff8814, transparent 40%);
+    }
+
+    .hero-intro {
+      max-width: 760px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+
+    .eyebrow,
+    .section-label {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .hero h1 {
+      margin: 16px 0;
+      font-size: clamp(42px, 7vw, 72px);
+      line-height: 1.04;
+      letter-spacing: -3px;
+    }
+
+    .hero h1 span {
+      color: var(--green);
+    }
+
+    .hero-intro > p:last-child {
+      max-width: 610px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* Kulüp kartı */
+    .identity-card {
+      min-height: 290px;
+      display: grid;
+      grid-template-columns: 0.8fr 0.85fr 1.55fr;
+      align-items: center;
+      gap: 24px;
+      padding: 28px;
+      overflow: hidden;
+      border: 1px solid #293b31;
+      border-radius: 18px;
+      background: linear-gradient(90deg, #102341 0 29%, #c8cbd0 29% 100%);
+      color: #101d3e;
+      box-shadow: 0 25px 70px #0006;
+    }
+
+    .club-brand {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .club-logo {
+      display: block;
+      width: 100%;
+      max-width: 230px;
+      height: auto;
+    }
+
+    .identity-photo {
+      width: 180px;
+      height: 180px;
+      justify-self: center;
+      overflow: hidden;
+      border: 6px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px #16345a;
+    }
+
+    .identity-photo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .identity-info h2 {
+      margin-bottom: 4px;
+      font-size: clamp(21px, 3vw, 32px);
+      line-height: 1.2;
+    }
+
+    .identity-info p {
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+
+    .identity-info .field {
+      font-size: 15px;
+    }
+
+    .identity-info .club-role {
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .identity-info .club-email {
+      display: inline-block;
+      margin-top: 12px;
+      color: #102341;
+      font-size: 13px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+
+    /* Genel bölüm başlıkları */
+    .content-section {
+      padding: 82px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-heading {
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    .section-heading h2 {
+      margin: 8px 0;
+      font-size: clamp(29px, 4vw, 38px);
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Hakkımda */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .about-box,
+    .info-card,
+    .skill-card,
+    .project-card,
+    .goal-card,
+    .education-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+    }
+
+    .about-box {
+      padding: 25px;
+    }
+
+    .about-box p {
+      margin-bottom: 14px;
+      color: #aeb8b1;
+      font-size: 13px;
+    }
+
+    .about-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-side {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-card {
+      padding: 19px;
+    }
+
+    .info-card span {
+      color: var(--green);
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .info-card h3 {
+      margin: 5px 0;
+      font-size: 15px;
+    }
+
+    .info-card p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Beceriler */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .skill-card {
+      padding: 21px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .skill-card:hover,
+    .project-card:hover,
+    .goal-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--green);
+    }
+
+    .skill-icon {
+      width: 42px;
+      height: 42px;
+      margin-bottom: 13px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: #39ff8818;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .skill-card p {
+      min-height: 40px;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .skill-status {
+      display: inline-block;
+      margin-top: 13px;
+      padding: 4px 9px;
+      border: 1px solid #284033;
+      border-radius: 20px;
+      color: var(--green);
+      font-size: 10px;
+    }
+
+    /* Projeler */
+    .project-card {
+      max-width: 760px;
+      margin: auto;
+      padding: 23px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .project-symbol {
+      color: var(--green);
+      font-size: 25px;
+    }
+
+    .project-card p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .project-card a {
+      flex-shrink: 0;
+      margin-left: auto;
+      color: var(--green);
+      font-size: 12px;
+    }
+
+    /* Hedefler */
+    .goals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .goal-card {
+      padding: 22px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .goal-number {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .goal-card h3 {
+      margin: 14px 0 7px;
+      font-size: 15px;
+    }
+
+    .goal-card p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Eğitim */
+    .education-card {
+      max-width: 760px;
+      margin: auto;
+      padding: 23px;
+      border-left: 3px solid var(--green);
+    }
+
+    .education-card span {
+      color: var(--green);
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .education-card h3 {
+      margin: 7px 0 3px;
+    }
+
+    .education-card p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* İletişim */
+    .contact {
+      padding: 80px 20px;
+      text-align: center;
+      border-top: 1px solid var(--line);
+      background: radial-gradient(ellipse at center, #39ff8812, transparent 60%);
+    }
+
+    .contact h2 {
+      margin: 10px 0 22px;
+      font-size: clamp(36px, 6vw, 56px);
+    }
+
+    .button {
+      display: inline-block;
+      padding: 11px 17px;
+      border: 1px solid var(--green);
+      border-radius: 7px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .button.primary {
+      background: var(--green);
+      color: #061009;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px #39ff8830;
+    }
+
+    .contact-grid {
+      max-width: 800px;
+      margin: 28px auto 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .contact-card {
+      padding: 17px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #0d130f;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--green);
+    }
+
+    .contact-card span {
+      color: var(--green);
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .contact-card strong {
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      padding: 21px;
+      border-top: 1px solid var(--line);
+      color: #778179;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    /* Mobil menü ve küçük ekran düzeni */
+    @media (max-width: 800px) {
+      .nav-inner {
+        min-height: 64px;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 64px;
+        right: 5%;
+        left: 5%;
+        display: none;
+        padding: 18px;
+        flex-direction: column;
+        gap: 15px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #0d130f;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .hero {
+        padding-top: 60px;
+      }
+
+      .identity-card {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 15px;
+        padding: 24px 18px;
+        text-align: center;
+        background: linear-gradient(180deg, #102341 0 22%, #c8cbd0 22% 100%);
+      }
+
+      .club-logo {
+        max-width: 190px;
+      }
+
+      .identity-photo {
+        width: 155px;
+        height: 155px;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .goals-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 44px;
+      }
+
+      .skills-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .project-card a {
+        margin-left: 43px;
+      }
+
+      .content-section {
+        padding: 65px 0;
+      }
+    }
+  </style>
 </head>
-<body><div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
-<header class="site-header"><a class="wordmark" href="index.html"><span class="mark">R</span><span>Rasim Göktuğ Can</span></a><button class="menu-toggle" aria-label="Menüyü aç" aria-expanded="false">☰</button><nav class="nav"><a class="active" href="index.html">Ana Sayfa</a><a href="about.html">Hakkımda</a><a href="projects.html">Projeler</a><a href="contact.html">İletişim</a></nav><a class="header-cta" href="contact.html">İletişime geç <span>↗</span></a></header>
-<main><section class="hero wrap"><div class="hero-copy"><div class="eyebrow"><span class="pulse"></span> MERHABA, BEN RASİM GÖKTUĞ CAN</div><h1>Fikirleri <span class="accent">üreten</span>,<br>kodla <span class="outline">öğrenen.</span></h1><p class="lead">İstanbul Kültür Üniversitesi Yazılım Mühendisliği öğrencisiyim. Teknoloji öğrenirken farklı alanlarda üretmeyi ve ekiplerle çalışmayı seviyorum.</p><div class="hero-actions"><a class="button primary" href="projects.html">Çalışmaları keşfet <span>↗</span></a><a class="button secondary" href="about.html">Beni tanı</a></div><div class="social-row"><a href="https://github.com/rgc3408-collab" target="_blank" rel="noreferrer">GitHub ↗</a><span class="dot-sep">·</span><a href="https://www.linkedin.com/in/rasimgoktugcan" target="_blank" rel="noreferrer">LinkedIn ↗</a><span class="dot-sep">·</span><span>İstanbul, Türkiye</span></div></div><div class="hero-art"><div class="portrait"><img src="profile.jpg" alt="Rasim Göktuğ Can"/><span>RASİM · İKÜ</span></div><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="code-card"><div class="card-top"><span class="window-dots"><i></i><i></i><i></i></span><span class="mono">about_me.js</span><span class="card-live">● online</span></div><div class="code-content"><div><span class="line-no">01</span> <span class="code-purple">const</span> <span class="code-blue">rasim</span> = {</div><div><span class="line-no">02</span> &nbsp; okul: <span class="code-green">"İKÜ"</span>,</div><div><span class="line-no">03</span> &nbsp; bölüm: <span class="code-green">"Yazılım Müh."</span>,</div><div><span class="line-no">04</span> &nbsp; sınıf: <span class="code-orange">1</span>,</div><div><span class="line-no">05</span> &nbsp; merak: [</div><div><span class="line-no">06</span> &nbsp;&nbsp; <span class="code-green">"teknoloji"</span>,</div><div><span class="line-no">07</span> &nbsp;&nbsp; <span class="code-green">"tasarım"</span>,</div><div><span class="line-no">08</span> &nbsp;&nbsp; <span class="code-green">"üretmek"</span></div><div><span class="line-no">09</span> &nbsp; ]</div><div><span class="line-no">10</span> }<span class="cursor">▍</span></div></div></div><div class="floating-tag tag-html"><b>&lt;/&gt;</b> HTML · CSS · JS</div><div class="floating-tag tag-c"><b>C</b> Öğrenme yolunda</div><div class="art-caption mono">KODLA · ÖĞREN · PAYLAŞ</div></div></section>
-<section class="strip"><div class="wrap strip-inner"><span class="mono strip-label">ŞU ANDA</span><span>Yazılım Mühendisliği öğrencisi</span><i></i><span>Web teknolojilerini öğreniyor</span><i></i><span>Öğrenci kulübünde içerik üretiyor</span></div></section>
-<section class="wrap home-grid"><div><div class="section-kicker">01 / KISA TANITIM</div><h2>Öğrenirken <span class="accent">üretmeye</span> inanıyorum.</h2></div><div class="home-detail"><p>Yazılım yolculuğumun başındayım. HTML, CSS, JavaScript ve C ile temellerimi geliştirirken; İKÜ Endüstri Mühendisliği Kulübü’nün sosyal medya komitesinde de görev alıyorum.</p><a class="text-link" href="about.html">Hakkımda daha fazlası <span>→</span></a></div></section>
-</main><footer class="footer wrap"><span>© <span data-year></span> Rasim Göktuğ Can</span><span>Merakla yapıldı <b>✳</b></span><a href="contact.html">İletişim ↗</a></footer></body></html>
 
+<body>
+  <header class="navbar">
+    <nav class="nav-inner" aria-label="Ana menü">
+      <a class="logo" href="#anasayfa">RGC.</a>
 
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-label="Menüyü aç"
+        aria-expanded="false"
+      >☰</button>
+
+      <ul class="nav-links">
+        <li><a href="#hakkimda">Hakkımda</a></li>
+        <li><a href="#yetenekler">Yetenekler</a></li>
+        <li><a href="#projeler">Projeler</a></li>
+        <li><a href="#egitim">Eğitim</a></li>
+        <li><a href="#hedefler">Hedefler</a></li>
+        <li><a href="#iletisim">İletişim</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="anasayfa">
+      <div class="container">
+        <div class="hero-intro">
+          <p class="eyebrow">YAZILIM MÜHENDİSLİĞİ · İKÜ</p>
+          <h1>Öğreniyor, <span>üretiyorum.</span></h1>
+          <p>
+            Yazılım Mühendisliği öğrencisiyim. Teknoloji öğrenirken
+            kulüp çalışmalarında da aktif rol alıyorum.
+          </p>
+        </div>
+
+        <div class="identity-card">
+          <div class="club-brand">
+            <img
+              class="club-logo"
+              src="iku-emk-logo.png"
+              alt="İKÜ Endüstri Mühendisliği Kulübü"
+            >
+          </div>
+
+          <div class="identity-photo">
+            <img src="profil.jpg" alt="Rasim Göktuğ Can">
+          </div>
+
+          <div class="identity-info">
+            <h2>Rasim Göktuğ Can</h2>
+            <p class="field">Yazılım Mühendisliği Öğrencisi · 1. sınıf</p>
+            <p class="club-role">
+              Pazarlama ve Sosyal Medya<br>
+              Komitesi Aktif Üyesi
+            </p>
+            <a
+              class="club-email"
+              href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=emk.rasimgoktugcan%40gmail.com"
+              target="_blank"
+              rel="noreferrer"
+            >✉ &nbsp; emk.rasimgoktugcan@gmail.com</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="hakkimda">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">01 / HAKKIMDA</span>
+          <h2>Kimim?</h2>
+          <p>Yazılım ve topluluk çalışmalarından kısa bir kesit.</p>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-box">
+            <p>
+              Merhaba, ben Rasim Göktuğ Can. İstanbul Kültür Üniversitesi’nde
+              Yazılım Mühendisliği 1. sınıf öğrencisiyim.
+            </p>
+            <p>
+              HTML, CSS ve JavaScript’te başlangıç seviyesinde çalışıyorum;
+              C programlama dilini de öğreniyorum.
+            </p>
+            <p>
+              İKÜ Endüstri Mühendisliği Kulübü’nde Pazarlama ve Sosyal Medya
+              Komitesi Aktif Üyesi olarak görev alıyorum.
+            </p>
+          </div>
+
+          <div class="about-side">
+            <div class="info-card">
+              <span>EĞİTİM</span>
+              <h3>Yazılım Mühendisliği</h3>
+              <p>İstanbul Kültür Üniversitesi · 1. sınıf</p>
+            </div>
+
+            <div class="info-card">
+              <span>KULÜP</span>
+              <h3>Pazarlama ve Sosyal Medya</h3>
+              <p>İKÜ Endüstri Mühendisliği Kulübü</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="yetenekler">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">02 / YETENEKLER</span>
+          <h2>Öğrenme alanlarım</h2>
+          <p>Şu anda üzerinde çalıştığım teknolojiler.</p>
+        </div>
+
+        <div class="skills-grid">
+          <article class="skill-card">
+            <div class="skill-icon">HTML</div>
+            <h3>HTML</h3>
+            <p>Web sayfalarının temel yapısını öğreniyorum.</p>
+            <span class="skill-status">Başlangıç</span>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">CSS</div>
+            <h3>CSS</h3>
+            <p>Sayfa düzeni ve görsel tasarım üzerinde çalışıyorum.</p>
+            <span class="skill-status">Başlangıç</span>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">JS</div>
+            <h3>JavaScript</h3>
+            <p>Web sayfalarına etkileşim eklemeyi öğreniyorum.</p>
+            <span class="skill-status">Başlangıç</span>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-icon">C</div>
+            <h3>C</h3>
+            <p>Programlama temelleri üzerinde çalışıyorum.</p>
+            <span class="skill-status">Öğreniyorum</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="projeler">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">03 / PROJELER</span>
+          <h2>Çalışmalarım</h2>
+          <p>Projelerimi tamamladıkça burada paylaşacağım.</p>
+        </div>
+
+        <article class="project-card">
+          <span class="project-symbol">✳</span>
+          <div>
+            <h3>Kişisel portföyüm</h3>
+            <p>
+              Bu siteyi web geliştirme öğrenme sürecimin bir parçası olarak
+              hazırlıyorum.
+            </p>
+          </div>
+          <a href="https://github.com/rgc3408-collab" target="_blank" rel="noreferrer">
+            GitHub profilim ↗
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section" id="egitim">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">04 / EĞİTİM</span>
+          <h2>Akademik yolculuğum</h2>
+        </div>
+
+        <div class="education-card">
+          <span>ÜNİVERSİTE</span>
+          <h3>İstanbul Kültür Üniversitesi</h3>
+          <p>Yazılım Mühendisliği · 1. sınıf</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="hedefler">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-label">05 / HEDEFLER</span>
+          <h2>Bir sonraki adımlarım</h2>
+          <p>Öğrenme ve gelişim sürecimde odaklandıklarım.</p>
+        </div>
+
+        <div class="goals-grid">
+          <article class="goal-card">
+            <span class="goal-number">01</span>
+            <h3>Temelimi güçlendirmek</h3>
+            <p>HTML, CSS, JavaScript ve C konularında düzenli pratik yapmak.</p>
+          </article>
+
+          <article class="goal-card">
+            <span class="goal-number">02</span>
+            <h3>Projeler üretmek</h3>
+            <p>Öğrendiklerimi küçük uygulamalara dönüştürmek.</p>
+          </article>
+
+          <article class="goal-card">
+            <span class="goal-number">03</span>
+            <h3>Ekip içinde gelişmek</h3>
+            <p>Kulüp çalışmalarında iletişim ve ekip deneyimi kazanmak.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="iletisim">
+      <p class="section-label">06 / İLETİŞİM</p>
+      <h2>Tanışalım<span style="color: var(--green)">.</span></h2>
+
+      <div class="contact-grid">
+        <a
+          class="contact-card"
+          href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=rgc3408%40gmail.com"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>KİŞİSEL E-POSTA</span>
+          <strong>rgc3408@gmail.com</strong>
+        </a>
+
+        <a
+          class="contact-card"
+          href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=emk.rasimgoktugcan%40gmail.com"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>KULÜP E-POSTASI</span>
+          <strong>emk.rasimgoktugcan@gmail.com</strong>
+        </a>
+
+        <a
+          class="contact-card"
+          href="https://www.linkedin.com/in/rasimgoktugcan"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>LINKEDIN</span>
+          <strong>linkedin.com/in/rasimgoktugcan</strong>
+        </a>
+
+        <a
+          class="contact-card"
+          href="https://github.com/rgc3408-collab"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>GITHUB</span>
+          <strong>github.com/rgc3408-collab</strong>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Rasim Göktuğ Can · Merakla yapıldı
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    menuButton.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("open");
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      menuButton.textContent = isOpen ? "×" : "☰";
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.textContent = "☰";
+      });
+    });
+
+    document.querySelector("#year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
