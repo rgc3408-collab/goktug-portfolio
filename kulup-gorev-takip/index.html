@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101c2c">
+  <title>İKÜ EMK | Görev Takipçisi</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Ana sayfa">
+        <span class="brand-mark">K</span>
+        <span>
+          <strong>İKÜ EMK</strong>
+          <small>Görev Takipçisi</small>
+        </span>
+      </a>
+      <div class="account-area">
+        <span id="connection-status" class="connection-badge" data-state="connecting">
+          <span></span> Bağlanıyor
+        </span>
+        <button id="signout-button" class="text-button signout-button" type="button" hidden>
+          Çıkış yap
+        </button>
+      </div>
+    </header>
+
+    <section id="auth-panel" class="auth-panel">
+      <p class="eyebrow">KULÜP EKİBİNE ÖZEL</p>
+      <h1>Ekibin görev alanına<br><span>hoş geldin.</span></h1>
+      <p class="intro-copy">
+        Kulüp e-posta adresinle giriş yap. Üye erişimi onaylı e-posta adresleriyle sınırlıdır.
+      </p>
+
+      <form id="auth-form" class="auth-form">
+        <label for="auth-email">E-posta adresi</label>
+        <input id="auth-email" type="email" autocomplete="email" placeholder="ornek@eposta.com" required>
+
+        <label for="auth-password">Şifre</label>
+        <input id="auth-password" type="password" autocomplete="current-password" minlength="8" placeholder="En az 8 karakter" required>
+
+        <div class="auth-actions">
+          <button id="login-button" class="primary-button" type="submit">
+            <span>Giriş yap</span><span aria-hidden="true">→</span>
+          </button>
+          <button id="signup-button" class="secondary-button" type="button">
+            Hesap oluştur
+          </button>
+        </div>
+      </form>
+      <p id="auth-message" class="notice" role="status" aria-live="polite">
+        Bağlantı hazırlanıyor…
+      </p>
+    </section>
+
+    <main id="app-content" hidden>
+      <section class="intro">
+        <p class="eyebrow">EKİBİN İŞ TAKİP ALANI</p>
+        <h1>İyi işler,<br><span>iyi bir planla başlar.</span></h1>
+        <p class="intro-copy">
+          Etkinlik ve sosyal medya görevlerini ekle, ekiple takip et.
+          Görevler ortak veritabanında saklanır.
+        </p>
+      </section>
+
+      <section class="stats" aria-label="Görev özeti">
+        <article class="stat-card">
+          <span class="stat-label">Toplam görev</span>
+          <strong id="total-count">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Devam ediyor</span>
+          <strong id="active-count">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Tamamlandı</span>
+          <strong id="completed-count">0</strong>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <form id="task-form" class="form-card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">YENİ KAYIT</p>
+              <h2>Görev oluştur</h2>
+            </div>
+            <span class="heading-icon" aria-hidden="true">＋</span>
+          </div>
+
+          <label for="task-input">Görev adı <span>*</span></label>
+          <input
+            id="task-input"
+            type="text"
+            maxlength="90"
+            placeholder="Örn. Bahar etkinliği için afiş hazırla"
+            required
+          >
+
+          <div class="form-row">
+            <div class="field">
+              <label for="category-input">Kategori</label>
+              <select id="category-input">
+                <option value="Etkinlik">Etkinlik</option>
+                <option value="Sosyal medya">Sosyal medya</option>
+                <option value="Lojistik">Lojistik</option>
+                <option value="Genel">Genel</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="date-input">Son tarih</label>
+              <input id="date-input" type="date">
+            </div>
+          </div>
+
+          <label for="assignee-input">Sorumlu kişi</label>
+          <input
+            id="assignee-input"
+            type="text"
+            maxlength="50"
+            placeholder="Örn. Rasim"
+          >
+
+          <button class="primary-button" type="submit">
+            <span>Görevi ekle</span><span aria-hidden="true">→</span>
+          </button>
+          <p class="form-note">Görevler bu kulüp projesine giriş yapabilen üyelerle paylaşılır.</p>
+        </form>
+
+        <section class="tasks-panel" aria-labelledby="tasks-title">
+          <div class="tasks-heading">
+            <div>
+              <p class="eyebrow">EKİP PANOSU</p>
+              <h2 id="tasks-title">Görevler</h2>
+            </div>
+            <button id="clear-completed" class="text-button" type="button">
+              Tamamlananları temizle
+            </button>
+          </div>
+
+          <p id="app-message" class="notice app-message" role="status" aria-live="polite"></p>
+
+          <div class="toolbar">
+            <label class="search-box" for="search-input">
+              <span aria-hidden="true">⌕</span>
+              <input id="search-input" type="search" placeholder="Görevlerde ara">
+            </label>
+            <select id="filter-input" aria-label="Görev filtresi">
+              <option value="all">Tüm görevler</option>
+              <option value="active">Devam edenler</option>
+              <option value="completed">Tamamlananlar</option>
+            </select>
+          </div>
+
+          <div id="task-list" class="task-list" aria-live="polite"></div>
+          <p id="empty-state" class="empty-state">
+            Henüz görev yok. İlk görevi ekleyerek başlayabilirsin.
+          </p>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <span>İKÜ Endüstri Mühendisliği Kulübü</span>
+      <span>Birlikte planla, birlikte tamamla.</span>
+    </footer>
+  </div>
+</body>
+</html>
+
